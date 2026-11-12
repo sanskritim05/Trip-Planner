@@ -1,0 +1,306 @@
+@import "leaflet/dist/leaflet.css";
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Colors, fonts, corners and shadows live in src/lib/theme.ts. */
+@config "../tailwind.config.ts";
+
+@layer base {
+  * {
+    border-color: theme(colors.border);
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: theme(colors.background);
+    background-image:
+      radial-gradient(40rem 28rem at 105% -5%, oklch(0.93 0.05 355 / 0.55), transparent 60%),
+      radial-gradient(36rem 26rem at -10% 105%, oklch(0.93 0.045 205 / 0.55), transparent 60%);
+    background-attachment: fixed;
+    color: theme(colors.foreground);
+    font-family: theme(fontFamily.sans);
+    -webkit-tap-highlight-color: transparent;
+  }
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: theme(fontFamily.display);
+    font-variation-settings:
+      "SOFT" 100,
+      "WONK" 1;
+  }
+  ::selection {
+    background: theme(colors.primary-soft);
+    color: theme(colors.primary-strong);
+  }
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility tap {
+  transition:
+    transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 200ms ease,
+    background-color 200ms ease,
+    opacity 200ms ease;
+  &:hover {
+    transform: translateY(-2px) rotate(-0.4deg);
+  }
+  &:active {
+    transform: scale(0.96);
+  }
+}
+
+@utility photo-fade {
+  background: linear-gradient(to top, oklch(0.22 0.06 250 / 0.78), oklch(0.22 0.06 250 / 0.05) 62%);
+}
+
+@utility washi {
+  background: repeating-linear-gradient(
+    45deg,
+    theme(colors.primary-soft) 0 6px,
+    theme(colors.sea-soft) 6px 12px
+  );
+  opacity: 0.95;
+}
+
+@utility paper {
+  background-color: theme(colors.card);
+  background-image:
+    radial-gradient(oklch(0.63 0.19 358 / 0.07) 1px, transparent 1px),
+    linear-gradient(oklch(0.6 0.11 215 / 0.04) 1px, transparent 1px);
+  background-size:
+    14px 14px,
+    100% 28px;
+}
+
+@utility polaroid {
+  background: theme(colors.card);
+  padding: 0.6rem 0.6rem 2.4rem;
+  box-shadow: theme(boxShadow.lift);
+  border-radius: 4px;
+}
+
+/* Hand-drawn wavy underline for a highlighted word. */
+@utility squiggle {
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: theme(colors.sea);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+
+@utility page-enter {
+  animation: page-in 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@utility bob {
+  animation: bob 3.2s ease-in-out infinite;
+}
+
+@utility wiggle {
+  &:hover {
+    animation: wiggle 500ms ease-in-out;
+  }
+}
+
+@utility unlock-pop {
+  animation: unlock-pop 700ms ease-out both;
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-6deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(-2deg);
+  }
+}
+
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  25% {
+    transform: rotate(-10deg) scale(1.1);
+  }
+  75% {
+    transform: rotate(10deg) scale(1.1);
+  }
+}
+
+@keyframes unlock-pop {
+  0% {
+    transform: scale(0.6) rotate(-8deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.1) rotate(3deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}
+
+@keyframes float-up {
+  0% {
+    translate: 0 0;
+    scale: 0.6;
+    rotate: 0deg;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  /* No translate/rotate here: each piece flies to its own inline translate and rotate. */
+  100% {
+    scale: 1.15;
+    opacity: 0;
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+.burst-piece {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  pointer-events: none;
+  animation: float-up 1100ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+.bubble {
+  position: absolute;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle at 30% 30%,
+    oklch(1 0 0 / 0.9),
+    oklch(0.93 0.045 205 / 0.35) 60%,
+    transparent 70%
+  );
+  animation: drift 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Range slider used by StepSlider: invisible track (drawn behind), big friendly thumb. */
+.ans-range {
+  appearance: none;
+  background: transparent;
+  height: 28px;
+  cursor: pointer;
+}
+.ans-range::-webkit-slider-thumb {
+  appearance: none;
+  height: 28px;
+  width: 28px;
+  border-radius: 9999px;
+  background: theme(colors.card);
+  border: 4px solid theme(colors.primary);
+  box-shadow: theme(boxShadow.soft);
+  transition: transform 150ms ease;
+}
+.ans-range:active::-webkit-slider-thumb {
+  transform: scale(1.18);
+}
+.ans-range::-moz-range-thumb {
+  height: 22px;
+  width: 22px;
+  border-radius: 9999px;
+  background: theme(colors.card);
+  border: 4px solid theme(colors.primary);
+  box-shadow: theme(boxShadow.soft);
+}
+.ans-range::-moz-range-track {
+  background: transparent;
+}
+.ans-range:focus-visible {
+  outline: none;
+}
+.ans-range:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 6px oklch(0.63 0.19 358 / 0.25);
+}
+
+/* Leaflet, re-dressed for the pastel palette. */
+.leaflet-container {
+  font-family: theme(fontFamily.sans);
+  background: theme(colors.sea-soft);
+}
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: theme(colors.card);
+  color: theme(colors.foreground);
+  border-radius: 1rem;
+  box-shadow: theme(boxShadow.lift);
+}
+.leaflet-control-attribution {
+  font-size: 9px;
+  background: oklch(1 0 0 / 0.75) !important;
+  border-radius: 8px 0 0 0;
+}
+.leaflet-bar a {
+  color: theme(colors.foreground);
+}
+/* Pastel the standard OSM tiles to match the palette. */
+.ans-tiles {
+  filter: saturate(0.7) brightness(1.05) contrast(0.92) hue-rotate(-12deg) sepia(0.12);
+}
+.ans-pin {
+  background: transparent;
+  border: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bob,
+  .bubble,
+  .burst-piece {
+    animation: none !important;
+  }
+  .burst-piece {
+    display: none;
+  }
+}
+
+@media print {
+  body {
+    background-image: none;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-page {
+    break-after: page;
+    box-shadow: none !important;
+  }
+}
