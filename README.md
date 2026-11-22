@@ -72,6 +72,7 @@ src/
   lib/             planner logic: itinerary, recommendations, crowds, budget, group merge, store
   services/        open-data clients: places (Wikipedia), weather, geocoding, routing, AI glue
   server/          server functions, auth, JSON store, AI (Groq, OpenAI-compatible chat completions)
+
 ```
 
 ## Scripts
